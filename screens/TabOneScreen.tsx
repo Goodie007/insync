@@ -1,22 +1,24 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
+import Task from '../components/Task';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <Text style={styles.title}>Todo List</Text>
+      <Task />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingTop: 30,
+    paddingHorizontal: 20,
+    // flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -29,4 +31,21 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  textInput : {
+    height: 40,
+    width: 250,
+    marginTop: 20,
+    marginRight: 12,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: '#4c4c4d',
+    borderRadius: 10,
+    backgroundColor: '#4c4c4d'
+    
+  },
+  text : {
+    fontSize: 20,
+    fontWeight: '700',
+    textAlign: 'center',
+  }
 });
