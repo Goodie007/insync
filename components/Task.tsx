@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import React, { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native'
 import {View, Text, TextInput, StyleSheet} from 'react-native'
 import axios from 'axios';
-import { title } from 'process';
+import { useNavigation } from '@react-navigation/native';
 
 
 interface TodoProps{
     id?: any;
-    title: any;
+    title: string;
     completed: boolean;
     userId: any;
     prev?: any;
@@ -20,8 +20,10 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
     const [todo, setTodo] = useState<TodoProps[]>([])
     const [edit, setEdit] = useState("")
     const [add, setAdd] = useState('')
+    const [delTask, setDelTask] = useState('')
     const [isloading, setLoading] = useState(true)
     const [deleteItem, setDeleteItem] = useState("")
+    const navigation = useNavigation()
 
 
 
@@ -30,7 +32,7 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
         .get(`${baseUrl}`)
         .then((response) => {
             setTodo(response.data)
-            console.log(response)
+            console.log(response.data)
         })
         .catch((error) => {
                 console.log(error);
@@ -45,33 +47,29 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
         // e.preventDefault()
         axios
         .post(`${baseUrl}`, {
-            title: title,
-            userId: userId,
+            title: add,
+            userId: "#00009",
             completed: false
         })
         .then((response) => {
-            setTodo((prev)=> [{title, userId, completed, id: Date.now()},...prev])
-            console.log(response)
+            setTodo((prev)=> [{title:add, userId, completed, id: Date.now()},...prev])
+            console.log(title, userId, response.data)
          })
          .catch((error) => {
             console.log(error)
          });
     }
 
-    const editTask = async () => {
+  
+
+    const deleteTask = async () => {
         axios
-        .put(`${baseUrl}`, {
-            title: title,
-            userId: userId,
-            completed: false
+        .delete(`${baseUrl}/${id}`, {
+            title: add,
         })
         .then((response) => {
-            console.log(response.data)
+            setTodo(todo.filter(add => id !== add.id))
         })
-    }
-
-    const deleteTask = () => {
-
     }
    
     return (
@@ -96,11 +94,12 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
                     <TextInput
                         placeholder='what do you have planned?'
                         style={styles.textInput}
-                        value={add}
+                        // value={add}
                         onChange={({ nativeEvent: { eventCount, target, text } }) => {
                             setAdd(text);
                             console.log(text);
-                        } } />
+                        } } 
+                    />
                     <TouchableOpacity
                         onPress={() => {
                             addTask();
@@ -109,21 +108,21 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
                         <Text style={styles.text}>Add Task</Text>
                     </TouchableOpacity>
                 </View><ScrollView>
-                        {todo.map((todo, id) => {
+                        {todo.map((t, id) => {
                             return (
                                 <View style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
                                     alignItems: 'center'
                                 }}
-                                    key={todo.id}
+                                    key={t.id}
                                 >
                                     <View style={styles.view}>
                                         <Text
                                             style={{
                                                 color: '#fff',
                                             }}
-                                        >{todo.title}</Text>
+                                        >{t.title}</Text>
                                     </View>
                                     <View
                                         style={{
@@ -141,7 +140,9 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
                                                 justifyContent: 'center',
                                             }}
                                             onPress={() => {
-                                                editTask();
+                                                // editTask();
+                                                navigation.navigate("TabTwo", {id})
+
                                             } }
                                         >
                                             <Text
@@ -157,6 +158,9 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
                                                 backgroundColor: 'blue',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
+                                            }}
+                                            onPress={() => {
+                                                deleteTask()
                                             }}
                                         >
                                             <Text

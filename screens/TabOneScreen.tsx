@@ -9,7 +9,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Todo List</Text>
-      <Task />
+      <Task  />
     </View>
   );
 }

@@ -1,14 +1,57 @@
-import { StyleSheet } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, Button } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
-export default function TabTwoScreen() {
+interface TabProps {
+  title: string;
+  userId: any;
+  id?: any;
+  completed: boolean
+}
+
+export default function TabTwoScreen({title, userId, completed, id}: TabProps) {
+  const baseUrl = "https://jsonplaceholder.typicode.com/todos/`"
+
+  const [edit, setEdit] = useState()
+  const navigation = useNavigation()
+
+  const editTask = async () => {
+    axios
+    .put(`${baseUrl}${id}`, {
+        title: "title",
+        userId: "#9996",
+        id: "500",
+        completed: false
+    })
+    .then((response) => {
+        console.log(response.data)
+        setEdit(response.data)
+    })
+}
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      {/* <Text style={styles.title}>Tab Two</Text> */}
+      <TextInput
+        placeholder={"Edit your todo"}
+        style={styles.textInput}
+        onChange={({ nativeEvent: { eventCount, target, text } }) => {
+          setEdit(text);
+          console.log(text);
+      } }
+      />
+      <Button 
+        title='edit'
+        color={"#841584"}
+        onPress={() => {
+          editTask()
+          navigation.navigate("TabOne")
+          
+        }}
+
+      />
     </View>
   );
 }
@@ -27,5 +70,19 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  textInput : {
+    height: 40,
+    width: 200,
+    marginTop: 20,
+    marginBottom: 10,
+    marginRight: 12,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: '#4c4c4d',
+    borderRadius: 10,
+    backgroundColor: '#4c4c4d',
+    color: '#FFF'
+    
   },
 });
