@@ -17,7 +17,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 const styles = StyleSheet.create({
   container: {
     paddingTop: 30,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     // flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

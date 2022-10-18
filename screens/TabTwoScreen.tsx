@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,  } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, Button } from 'react-native';
@@ -9,27 +9,31 @@ interface TabProps {
   title: string;
   userId: any;
   id?: any;
-  completed: boolean
+  completed: boolean;
+  route:any
 }
 
-export default function TabTwoScreen({title, userId, completed, id}: TabProps) {
-  const baseUrl = "https://jsonplaceholder.typicode.com/todos/`"
+export default function TabTwoScreen({title, userId, completed, route}: TabProps) {
+  const baseUrl = "https://jsonplaceholder.typicode.com/todos/"
 
   const [edit, setEdit] = useState()
   const navigation = useNavigation()
 
+  const { data } = route.params;
+
   const editTask = async () => {
     axios
-    .put(`${baseUrl}${id}`, {
+    .put(`${baseUrl}/${data}`, {
         title: "title",
         userId: "#9996",
-        id: "500",
         completed: false
     })
     .then((response) => {
         console.log(response.data)
         setEdit(response.data)
     })
+
+    console.log(data)
 }
   return (
     <View style={styles.container}>

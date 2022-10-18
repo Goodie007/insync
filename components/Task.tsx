@@ -64,11 +64,10 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
 
     const deleteTask = async () => {
         axios
-        .delete(`${baseUrl}/${id}`, {
-            title: add,
-        })
+        .delete(`${baseUrl}/${id}`)
         .then((response) => {
-            setTodo(todo.filter(add => id !== add.id))
+            setTodo(todo.filter((eachTodo)=> id !== eachTodo.id))
+            console.log(response)
         })
     }
    
@@ -128,6 +127,8 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
                                         style={{
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
+                                            marginTop: 10,
+                                            
                                         }}
                                     >
 
@@ -141,7 +142,10 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
                                             }}
                                             onPress={() => {
                                                 // editTask();
-                                                navigation.navigate("TabTwo", {id})
+                                                navigation.navigate("TabTwo", {
+                                                    data:t.id
+                                                    
+                                                })
 
                                             } }
                                         >
@@ -160,6 +164,7 @@ export default function Task({id, title, completed, event, prev, userId}: TodoPr
                                                 justifyContent: 'center',
                                             }}
                                             onPress={() => {
+                                                console.log("hello")
                                                 deleteTask()
                                             }}
                                         >
